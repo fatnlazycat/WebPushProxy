@@ -5,6 +5,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
   
   let dataMain = '';
   req.on('data', chunk => {
+    console.log('chunk', chunk);
     dataMain += chunk;
   })
   req.on('end', () => {
@@ -20,7 +21,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         const data = JSON.stringify({
           name: 'Buy the milk',
           head_sha: a,
-        })
+        });
         
         const options = {
           hostname: 'api.github.com',
@@ -34,12 +35,12 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         const r = http.request(options, resp => {
           console.log(`statusCode: ${res.statusCode}`)
         
-          res.on('data', d => {
+          resp.on('data', d => {
             process.stdout.write(d)
           })
         })
         
-        req.on('error', error => {
+        r.on('error', error => {
           console.error(error)
         })
         
@@ -48,7 +49,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         return;
       }; 
   }
-  res.writeHead(200).end('Hello, World 3!');
+  res.writeHead(200).end('Hello, World 4!');
 }
 
 const server = http.createServer(requestListener);
