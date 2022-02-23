@@ -6,7 +6,6 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
   
   let dataMain = '';
   req.on('data', chunk => {
-    console.log('chunk', chunk);
     dataMain += chunk;
   })
   req.on('end', async () => {
@@ -27,17 +26,15 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
           //   path: 'api.github.co/repos/fatnlazycat/githubToArgoProxy/check-runs',
           // }
           
-          const axiosR = await axios({
-            method: 'POST',
-            url: 'https:/api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
-            headers: {
-              'Accept': 'application/vnd.github.v3+json',
-            },
-            data: {
+          const axiosR = await axios.post('https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
+            {
               name: 'Buy the milk',
               head_sha: a,
-            },
-          });
+            }, {  
+              headers: {
+                'Accept': 'application/vnd.github.v3+json',
+              },
+            });
           // const r = http.request(options, resp => {
           //   console.log(`statusCode: ${res.statusCode}`)
           
