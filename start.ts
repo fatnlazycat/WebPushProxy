@@ -29,7 +29,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
           
           const axiosR = await axios({
             method: 'POST',
-            url: 'api.github.co/repos/fatnlazycat/githubToArgoProxy/check-runs',
+            url: 'https:/api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
             headers: {
               'Accept': 'application/vnd.github.v3+json',
             },
