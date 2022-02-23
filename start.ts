@@ -17,14 +17,6 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
           console.log('got it!');
           const b = dataMain ? JSON.parse(dataMain) : 'no payload';
           const a = b.check_suite ? b.check_suite.head_sha : b.check_run.head_sha
-          // const data = JSON.stringify({
-          //   name: 'Buy the milk',
-          //   head_sha: a,
-          // });
-          // const options = {
-          //   hostname: 'api.github.com',
-          //   path: 'api.github.co/repos/fatnlazycat/githubToArgoProxy/check-runs',
-          // }
           
           const axiosR = await axios.post('https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
             {
