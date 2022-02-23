@@ -1,3 +1,4 @@
+import axios from 'axios';
 import http, { IncomingMessage, ServerResponse } from 'http';
 
 const requestListener = function (req: IncomingMessage, res: ServerResponse) {
@@ -8,47 +9,55 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
     console.log('chunk', chunk);
     dataMain += chunk;
   })
-  req.on('end', () => {
+  req.on('end', async () => {
     console.log('payload', dataMain);
 
     switch (req.url) {
       case '/': 
         if (req.method === 'POST' && req.headers['x-github-event'] === 'check_suite') {
           console.log('got it!');
-          const b = JSON.parse(dataMain);
+          const b = dataMain ? JSON.parse(dataMain) : 'no payload';
           const a = b.check_suite ? b.check_suite.head_sha : b.check_run.head_sha
-          const data = JSON.stringify({
-            name: 'Buy the milk',
-            head_sha: a,
-          });
+          // const data = JSON.stringify({
+          //   name: 'Buy the milk',
+          //   head_sha: a,
+          // });
+          // const options = {
+          //   hostname: 'api.github.com',
+          //   path: 'api.github.co/repos/fatnlazycat/githubToArgoProxy/check-runs',
+          // }
           
-          const options = {
-            hostname: 'api.github.com',
-            path: '/repos/fatnlazycat/githubToArgoProxy/check-runs',
+          const axiosR = await axios({
             method: 'POST',
+            url: 'api.github.co/repos/fatnlazycat/githubToArgoProxy/check-runs',
             headers: {
               'Accept': 'application/vnd.github.v3+json',
-            }
-          }
+            },
+            data: {
+              name: 'Buy the milk',
+              head_sha: a,
+            },
+          });
+          // const r = http.request(options, resp => {
+          //   console.log(`statusCode: ${res.statusCode}`)
           
-          const r = http.request(options, resp => {
-            console.log(`statusCode: ${res.statusCode}`)
+          //   resp.on('data', d => {
+          //     process.stdout.write(d)
+          //   })
+          // })
           
-            resp.on('data', d => {
-              process.stdout.write(d)
-            })
-          })
+          // r.on('error', error => {
+          //   console.error(error)
+          // })
           
-          r.on('error', error => {
-            console.error(error)
-          })
-          
-          r.write(data)
-          r.end()
+          // r.write(data)
+          // r.end()
+          console.log('response from github', axiosR.status, axiosR.data);
+          res.writeHead(200).end('Hello, World from switch statement!');
           return;
         }; 
     }
-    res.writeHead(200).end('Hello, World 4!');
+    res.writeHead(200).end('Hello, World 5!');
   });
 
   
