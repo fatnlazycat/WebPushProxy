@@ -21,10 +21,12 @@
   },
   "homepage": "https://github.com/fatnlazycat/githubToArgoProxy#readme",
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
     "ts-node": "^10.5.0"
   },
   "dependencies": {
     "axios": "^0.26.0",
+    "jsonwebtoken": "^8.5.1",
     "typescript": "^4.5.5"
   },
   "engines": {
