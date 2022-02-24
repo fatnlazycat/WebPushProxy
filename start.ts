@@ -1,6 +1,6 @@
 import axios from 'axios';
 import http, { IncomingMessage, ServerResponse } from 'http';
-import { getToken } from 'src/token';
+import { getToken } from './src/token';
 
 const requestListener = function (req: IncomingMessage, res: ServerResponse) {
   console.log('request', req.url, req.headers);
