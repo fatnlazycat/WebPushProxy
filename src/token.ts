@@ -36,6 +36,7 @@ export const getToken = async (installationId: number) => {
   console.log('installationId', installationId);
   const installationToken = await axios.post(
     `https://api.github.com/app/installations/${installationId}/access_tokens`,
+    {},
     {  
       headers: {
         'Authorization': `Bearer ${getJWT()}`,
