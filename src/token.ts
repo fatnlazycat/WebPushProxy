@@ -45,5 +45,5 @@ export const getToken = async (installationId: number) => {
     }  
   );
   console.log('installationToken', installationToken);
-  return installationToken;
+  return installationToken.data.token;
 };
