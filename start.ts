@@ -18,7 +18,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
           console.log('got it!');
           const b = dataMain ? JSON.parse(dataMain) : 'no payload';
           const a = b.check_suite ? b.check_suite.head_sha : b.check_run.head_sha;
-          const key = getToken();
+          const key = await getToken();
           
           const axiosR = await axios.post('https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
             {
@@ -35,7 +35,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
           return;
         }; 
     }
-    res.writeHead(200).end('Hello, World 6!');
+    res.writeHead(200).end('Hello, World 7!');
   });
 
   
