@@ -18,7 +18,8 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
           console.log('got it!');
           const b = dataMain ? JSON.parse(dataMain) : 'no payload';
           const a = b.check_suite ? b.check_suite.head_sha : b.check_run.head_sha;
-          const key = await getToken();
+          const installationId = b.installation.id;
+          const key = await getToken(installationId);
           
           const axiosR = await axios.post('https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
             {

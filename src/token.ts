@@ -31,8 +31,8 @@ const getInstallationId = async () => {
   return installationId;
 }
 
-export const getToken = async () => {
-  const installationId = await getInstallationId();
+export const getToken = async (installationId: number) => {
+  // const installationId = await getInstallationId();
   console.log('installationId', installationId);
   const installationToken = await axios.post(
     `https://api.github.com/app/installations/${installationId}/access_tokens`,
