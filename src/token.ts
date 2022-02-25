@@ -15,7 +15,7 @@ const getJWT = () => {
   return jwtToken;
 };
 
-const getInstallations = async () => {
+const getInstallationId = async () => {
   const installations = await axios.get(
     `https://api.github.com/app/installations`,
     {  
@@ -25,13 +25,14 @@ const getInstallations = async () => {
       },
     }  
   );
-  const installation = Array.isArray(installations) && installations[0];
-  console.log('installation', installation)
-  return installation;
+  console.log('installations', installations);
+  const installationId = Array.isArray(installations) ? installations[0].id : 23543825;
+  console.log('installation', installationId)
+  return installationId;
 }
 
 export const getToken = async () => {
-  const installationId = (await getInstallations()).id;
+  const installationId = await getInstallationId();
   console.log('installationId', installationId);
   const installationToken = await axios.post(
     `https://api.github.com/app/installations/${installationId}/access_tokens`,
