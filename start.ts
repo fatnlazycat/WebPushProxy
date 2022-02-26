@@ -4,7 +4,7 @@ import { APP_ID, getToken } from './src/token';
 
 const requestListener = function (req: IncomingMessage, res: ServerResponse) {
   try {
-    console.log('request', req.url, req.headers);
+    console.log('received request', req.url, req.headers);
     
     let dataMain = '';
     req.on('data', chunk => {
@@ -12,6 +12,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
     })
     req.on('end', async () => {
       const payload = JSON.parse(dataMain);
+      console.log('payload', payload);
 
       if (req.url === '/' && req.method === 'POST' && req.headers['x-github-event'] === 'check_suite') {
         const a = payload.check_suite ? payload.check_suite.head_sha : payload.check_run.head_sha;

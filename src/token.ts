@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as jwt from 'jsonwebtoken';
 
-export const APP_ID = "174878";
+export const APP_ID = 174878;
 const getJWT = () => {
   const payload = {
     // issued at time, 60 seconds in the past to allow for clock drift
