@@ -1,6 +1,6 @@
 import axios from 'axios';
 import http, { IncomingMessage, ServerResponse } from 'http';
-import { getToken } from './src/token';
+import { APP_ID, getToken } from './src/token';
 
 const requestListener = function (req: IncomingMessage, res: ServerResponse) {
   try {
@@ -11,36 +11,68 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
       dataMain += chunk;
     })
     req.on('end', async () => {
-      console.log('payload', dataMain);
+      const payload = JSON.parse(dataMain);
 
-      switch (req.url) {
-        case '/': 
-          if (req.method === 'POST' && req.headers['x-github-event'] === 'check_suite') {
-            console.log('got it!');
-            const b = dataMain ? JSON.parse(dataMain) : 'no payload';
-            const a = b.check_suite ? b.check_suite.head_sha : b.check_run.head_sha;
-            const installationId = b.installation.id;
-            const key = await getToken(installationId);
-            
-            const axiosR = await axios.post('https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
-              {
-                name: 'Buy the milk',
-                head_sha: a,
-              }, {  
-                headers: {
-                  'Authorization': `Bearer ${key}`,
-                  'Accept': 'application/vnd.github.v3+json',
-                },
-              });
-            console.log('response from github', axiosR.status, axiosR.data);
-            res.writeHead(200).end('Hello, World from switch statement!');
-            return;
-          }; 
+      if (req.url === '/' && req.method === 'POST' && req.headers['x-github-event'] === 'check_suite') {
+        const a = payload.check_suite ? payload.check_suite.head_sha : payload.check_run.head_sha;
+        const installationId = payload.installation.id;
+        const key = await getToken(/*installationId*/);
+        
+        const axiosR = await axios.post('https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
+          {
+            name: 'Buy the milk',
+            head_sha: a,
+          }, {  
+            headers: {
+              'Authorization': `Bearer ${key}`,
+              'Accept': 'application/vnd.github.v3+json',
+            },
+          });
+        console.log('response from github', axiosR.status, axiosR.data);
+        res.writeHead(200).end('Hello, World from switch statement!');
+        return;
+      }; 
+
+      if (payload?.action === 'created' && payload.check_run?.app?.id === APP_ID) {
+        console.log('========= now we can start the pipeline ===========');
+        console.log('check_run', payload.check_run);
+
+        const installationId = payload.installation.id;
+        const key = await getToken(/*installationId*/);
+        const axiosR = await axios.patch(`https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs/${payload.check_run.id}`,
+          {
+            status: 'in_progress',
+          }, {  
+            headers: {
+              'Authorization': `Bearer ${key}`,
+              'Accept': 'application/vnd.github.v3+json',
+            },
+          });
+        console.log('response from github', axiosR.status, axiosR.data);
+        res.writeHead(200).end('Hello, World from switch statement!');
+        return;
+      };
+
+      if (req.url.match(/\/.*/g)) {
+        const checkRunId = req.url.substring(1);
+        const key = await getToken(/*installationId*/);
+        const axiosR = await axios.patch(`https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs/${payload.check_run.id}`,
+          {
+            status: 'completed',
+            conclusion: 'success',
+          }, {  
+            headers: {
+              'Authorization': `Bearer ${key}`,
+              'Accept': 'application/vnd.github.v3+json',
+            },
+          });
+        console.log('response from github', axiosR.status, axiosR.data);
       }
+
       res.writeHead(200).end('Hello, World 7!');
     });
   } catch(e) {
-    console.log(e);
+    console.log('in catch', e);
   }
   
 }

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import * as jwt from 'jsonwebtoken';
 
+export const APP_ID = "174878";
 const getJWT = () => {
   const payload = {
     // issued at time, 60 seconds in the past to allow for clock drift
@@ -8,7 +9,7 @@ const getJWT = () => {
     // JWT expiration time (10 minute maximum)
     exp: Math.floor(Date.now() / 1000 + (10 * 60)),
     // GitHub App's identifier
-    iss: "174878"
+    iss: APP_ID,
   }
   const jwtToken = jwt.sign(payload, process.env.GH_ARGO_PROXY_PRIVATE_KEY, { algorithm: 'RS256'});
   console.log('jwt token', jwtToken);
@@ -31,8 +32,8 @@ const getInstallationId = async () => {
   return installationId;
 }
 
-export const getToken = async (installationId: number) => {
-  // const installationId = await getInstallationId();
+export const getToken = async (/*installationId: number*/) => {
+  const installationId = await getInstallationId();
   console.log('installationId', installationId);
   const installationToken = await axios.post(
     `https://api.github.com/app/installations/${installationId}/access_tokens`,
