@@ -11,7 +11,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
       dataMain += chunk;
     })
     req.on('end', async () => {
-      const payload = JSON.parse(dataMain);
+      const payload = dataMain && JSON.parse(dataMain);
       console.log('payload', payload);
 
       if (req.url === '/' && req.method === 'POST' && req.headers['x-github-event'] === 'check_suite') {
