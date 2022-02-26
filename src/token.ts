@@ -26,9 +26,7 @@ const getInstallationId = async () => {
       },
     }  
   );
-  console.log('installations', installations);
   const installationId = Array.isArray(installations) ? installations[0].id : 23543825;
-  console.log('installation', installationId)
   return installationId;
 }
 
@@ -45,6 +43,6 @@ export const getToken = async (/*installationId: number*/) => {
       },
     }  
   );
-  console.log('installationToken', installationToken);
+  console.log('installationToken', installationToken.data);
   return installationToken.data.token;
 };
