@@ -55,7 +55,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
       };
 
       if (req.url.match(/\/success\/.+/g)) {
-        const checkRunId = req.url.substring(8);
+        const checkRunId = req.url.substring(9);
         const key = await getToken(/*installationId*/);
         const axiosR = await axios.patch(`https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs/${checkRunId}`,
           {
