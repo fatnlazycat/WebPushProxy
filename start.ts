@@ -21,7 +21,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         
         const axiosR = await axios.post('https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
           {
-            name: 'Buy the sausages',
+            name: 'Eat the sausages',
             head_sha: a,
           }, {  
             headers: {
@@ -55,7 +55,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
       };
 
       if (req.url.match(/\/success\/.+/g)) {
-        const checkRunId = req.url.substring(1);
+        const checkRunId = req.url.substring(8);
         const key = await getToken(/*installationId*/);
         const axiosR = await axios.patch(`https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs/${checkRunId}`,
           {
@@ -70,7 +70,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         console.log('response from github for PATCH/check_runs/success', axiosR.status, axiosR.data);
       }
 
-      res.writeHead(200).end('Hello, World 8!');
+      res.writeHead(200).end('Hello, World 9!');
     });
   } catch(e) {
     console.log('in catch', e);
