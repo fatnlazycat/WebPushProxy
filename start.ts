@@ -14,7 +14,11 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
       const payload = dataMain && JSON.parse(dataMain);
       console.log('payload', payload);
 
-      if (req.url === '/' && req.method === 'POST' && req.headers['x-github-event'] === 'check_suite') {
+      if (req.url === '/' &&
+        req.method === 'POST' &&
+        req.headers['x-github-event'] === 'check_suite' &&
+        payload?.action !== 'completed'
+      ) {
         console.log('gonna create a check_run', req.headers);
         const a = payload.check_suite ? payload.check_suite.head_sha : payload.check_run.head_sha;
         const installationId = payload.installation.id;
@@ -67,7 +71,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         console.log('response from github for PATCH/check_runs/success', axiosR.status, axiosR.data);
       }
 
-      res.writeHead(200).end('Hello, World 10!');
+      res.writeHead(200).end('Hello, World 11!');
     });
   } catch(e) {
     console.log('in catch', e);
