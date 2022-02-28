@@ -15,6 +15,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
       console.log('payload', payload);
 
       if (req.url === '/' && req.method === 'POST' && req.headers['x-github-event'] === 'check_suite') {
+        console.log('gonna create a check_run', req.headers);
         const a = payload.check_suite ? payload.check_suite.head_sha : payload.check_run.head_sha;
         const installationId = payload.installation.id;
         const key = await getToken(/*installationId*/);
