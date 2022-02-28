@@ -4,7 +4,7 @@ import { APP_ID, getToken } from './src/token';
 
 const requestListener = function (req: IncomingMessage, res: ServerResponse) {
   try {
-    console.log('received request', req.url, req.headers);
+    console.log('received request', req.url);
     
     let dataMain = '';
     req.on('data', chunk => {
@@ -21,7 +21,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         
         const axiosR = await axios.post('https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
           {
-            name: 'Eat the sausages',
+            name: 'Eat the bread',
             head_sha: a,
           }, {  
             headers: {
@@ -32,9 +32,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         console.log('response from github for POST/check_runs', axiosR.status, axiosR.data);
         res.writeHead(200).end('Hello, World from switch statement!');
         return;
-      }; 
-
-      if (payload?.action === 'created' && payload.check_run?.app?.id === APP_ID) {
+      } else if (payload?.action === 'created' && payload.check_run?.app?.id === APP_ID) {
         console.log('========= now we can start the pipeline ===========');
         console.log('check_run', payload.check_run);
 
@@ -52,9 +50,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         console.log('response from github for PATCH/check_runs/in_progress', axiosR.status, axiosR.data);
         res.writeHead(200).end('Hello, World from switch statement!');
         return;
-      };
-
-      if (req.url.match(/\/success\/.+/g)) {
+      } else if (req.url.match(/\/success\/.+/g)) {
         const checkRunId = req.url.substring(9);
         const key = await getToken(/*installationId*/);
         const axiosR = await axios.patch(`https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs/${checkRunId}`,
@@ -70,7 +66,7 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         console.log('response from github for PATCH/check_runs/success', axiosR.status, axiosR.data);
       }
 
-      res.writeHead(200).end('Hello, World 9!');
+      res.writeHead(200).end('Hello, World 10!');
     });
   } catch(e) {
     console.log('in catch', e);
