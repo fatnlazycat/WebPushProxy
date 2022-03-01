@@ -17,7 +17,7 @@ const getJWT = (): string => {
 };
 
 const getInstallationId = async (): Promise<string | undefined> => {
-  const installations = await axios.get(
+  const installations = (await axios.get(
     `https://api.github.com/app/installations`,
     {  
       headers: {
@@ -25,7 +25,7 @@ const getInstallationId = async (): Promise<string | undefined> => {
         'Accept': 'application/vnd.github.v3+json',
       },
     }  
-  );
+  )).data;
   const installationId = Array.isArray(installations) ? installations[0].id as string : undefined;
   return installationId;
 }
