@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "outDir": "dist",
+      "noImplicitAny": true,
+      "resolveJsonModule": true,
+      "module": "commonjs",
+      "esModuleInterop": true,
+      "strict": true,
+      "strictNullChecks": false,
+      "strictPropertyInitialization": false,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": true,
+      "pretty": true,
+      "target": "es2018",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "baseUrl": ".",
+    },
+    "include": ["src/**/*", "./*.ts"],
+    "exclude": ["node_modules", "dist"],
+}
+

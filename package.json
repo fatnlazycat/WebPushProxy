@@ -1,0 +1,35 @@
+{
+  "name": "github-to-argo-proxy",
+  "version": "1.0.0",
+  "description": "github-to-argo-proxy",
+  "main": "dist/start.js",
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "build-watch": "tsc --watch",
+    "prestart": "npm ci && npm run build",
+    "start": "node dist/start.js",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fatnlazycat/githubToArgoProxy.git"
+  },
+  "author": "fatnlazycat",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fatnlazycat/githubToArgoProxy/issues"
+  },
+  "homepage": "https://github.com/fatnlazycat/githubToArgoProxy#readme",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
+    "ts-node": "^10.5.0"
+  },
+  "dependencies": {
+    "axios": "^0.26.0",
+    "jsonwebtoken": "^8.5.1",
+    "typescript": "^4.5.5"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
