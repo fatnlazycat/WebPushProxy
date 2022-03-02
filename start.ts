@@ -1,7 +1,7 @@
 import http, { IncomingMessage, ServerResponse } from 'http';
 import { APP_ID } from './src/token';
-import { createCheckRun, startCheckRun, successCheckRun } from 'src/router';
-import { SUCCESS_URL, SUCCESS_URL_LENGTH } from 'src/constants';
+import { createCheckRun, startCheckRun, successCheckRun } from './src/router';
+import { SUCCESS_URL, SUCCESS_URL_LENGTH } from './src/constants';
 
 const requestListener = (req: IncomingMessage, res: ServerResponse) => {
   try {
