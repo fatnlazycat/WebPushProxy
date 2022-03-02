@@ -2,6 +2,16 @@ import axios from 'axios';
 import http, { IncomingMessage, ServerResponse } from 'http';
 import { APP_ID, getToken } from './src/token';
 
+const createHeaders = async (): Promise<{ headers: Record<string, any> }> => {
+  const key = await getToken();
+  return {  
+    headers: {
+      'Authorization': `Bearer ${key}`,
+      'Accept': 'application/vnd.github.v3+json',
+    }
+  };
+}
+
 const requestListener = function (req: IncomingMessage, res: ServerResponse) {
   try {
     console.log('received request', req.url);
@@ -20,20 +30,14 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         payload?.action !== 'completed'
       ) {
         console.log('gonna create a check_run', req.headers);
-        const a = payload.check_suite ? payload.check_suite.head_sha : payload.check_run.head_sha;
-        const installationId = payload.installation.id;
-        const key = await getToken(/*installationId*/);
+        const headSHA = payload.check_suite ? payload.check_suite.head_sha : payload.check_run.head_sha;
+        const headers = await createHeaders();
         
         const axiosR = await axios.post('https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs',
           {
             name: 'Eat the bread',
-            head_sha: a,
-          }, {  
-            headers: {
-              'Authorization': `Bearer ${key}`,
-              'Accept': 'application/vnd.github.v3+json',
-            },
-          });
+            head_sha: headSHA,
+          }, headers);
         console.log('response from github for POST/check_runs', axiosR.status, axiosR.data);
         res.writeHead(200).end('Hello, World from switch statement!');
         return;
@@ -41,37 +45,26 @@ const requestListener = function (req: IncomingMessage, res: ServerResponse) {
         console.log('========= now we can start the pipeline ===========');
         console.log('check_run', payload.check_run);
 
-        const installationId = payload.installation.id;
-        const key = await getToken(/*installationId*/);
+        const headers = await createHeaders();
         const axiosR = await axios.patch(`https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs/${payload.check_run.id}`,
           {
             status: 'in_progress',
-          }, {  
-            headers: {
-              'Authorization': `Bearer ${key}`,
-              'Accept': 'application/vnd.github.v3+json',
-            },
-          });
+          }, headers);
         console.log('response from github for PATCH/check_runs/in_progress', axiosR.status, axiosR.data);
         res.writeHead(200).end('Hello, World from switch statement!');
         return;
       } else if (req.url.match(/\/success\/.+/g)) {
         const checkRunId = req.url.substring(9);
-        const key = await getToken(/*installationId*/);
+        const headers = await createHeaders();
         const axiosR = await axios.patch(`https://api.github.com/repos/fatnlazycat/githubToArgoProxy/check-runs/${checkRunId}`,
           {
             status: 'completed',
             conclusion: 'success',
-          }, {  
-            headers: {
-              'Authorization': `Bearer ${key}`,
-              'Accept': 'application/vnd.github.v3+json',
-            },
-          });
+          }, headers);
         console.log('response from github for PATCH/check_runs/success', axiosR.status, axiosR.data);
       }
 
-      res.writeHead(200).end('Hello, World 11!');
+      res.writeHead(200).end('no match found - 404');
     });
   } catch(e) {
     console.log('in catch', e);

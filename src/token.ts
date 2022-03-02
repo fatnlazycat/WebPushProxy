@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as jwt from 'jsonwebtoken';
 
 export const APP_ID = 174878;
-const getJWT = () => {
+const getJWT = (): string => {
   const payload = {
     // issued at time, 60 seconds in the past to allow for clock drift
     iat: Math.floor(Date.now() / 1000 - 60),
@@ -16,8 +16,8 @@ const getJWT = () => {
   return jwtToken;
 };
 
-const getInstallationId = async () => {
-  const installations = await axios.get(
+const getInstallationId = async (): Promise<string | undefined> => {
+  const installations = (await axios.get(
     `https://api.github.com/app/installations`,
     {  
       headers: {
@@ -25,12 +25,12 @@ const getInstallationId = async () => {
         'Accept': 'application/vnd.github.v3+json',
       },
     }  
-  );
-  const installationId = Array.isArray(installations) ? installations[0].id : 23543825;
+  )).data;
+  const installationId = Array.isArray(installations) ? installations[0].id as string : undefined;
   return installationId;
 }
 
-export const getToken = async (/*installationId: number*/) => {
+export const getToken = async (): Promise<string> => {
   const installationId = await getInstallationId();
   console.log('installationId', installationId);
   const installationToken = await axios.post(
