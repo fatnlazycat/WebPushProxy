@@ -1,7 +1,7 @@
 import http, { IncomingMessage, ServerResponse } from 'http';
 import { APP_ID } from './src/token';
-import { createCheckRun, startCheckRun, successCheckRun } from './src/router';
-import { SUCCESS_URL, SUCCESS_URL_LENGTH } from './src/constants';
+import { createCheckRun, startCheckRun, completeCheckRun } from './src/controller';
+import { COMPLETED_URL, COMPLETED_URL_LENGTH } from './src/constants';
 
 const requestListener = (req: IncomingMessage, res: ServerResponse) => {
   try {
@@ -28,10 +28,10 @@ const requestListener = (req: IncomingMessage, res: ServerResponse) => {
         const checkRunStartResponse = await startCheckRun(payload);
         res.writeHead(200).end(checkRunStartResponse);
         return;
-      } else if (req.url.match(SUCCESS_URL)) {
-        const checkRunId = req.url.substring(SUCCESS_URL_LENGTH);
-        const checkRunSuccessResponse = await successCheckRun(checkRunId);
-        res.writeHead(200).end(checkRunSuccessResponse);
+      } else if (req.url.match(COMPLETED_URL)) {
+        const checkRunId = req.url.substring(COMPLETED_URL_LENGTH);
+        const checkRunCompleteResponse = await completeCheckRun(checkRunId, payload);
+        res.writeHead(200).end(checkRunCompleteResponse);
       } else {
         res.writeHead(200).end('no match found - 404');
       };
