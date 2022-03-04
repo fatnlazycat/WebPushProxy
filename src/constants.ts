@@ -4,5 +4,16 @@ export enum GHCheckRunStatus {
   COMPLETED = 'completed',
 };
 
-export const SUCCESS_URL = /\/success\/.+/g;
-export const SUCCESS_URL_LENGTH = 9;
+export enum GHCheckRunConclusion {
+  ACTION_REQUIRED = 'action_required',
+  CANCELLED = 'cancelled',
+  FAILURE = 'failure',
+  NEUTRAL = 'neutral',
+  SUCCESS = 'success',
+  SKIPPED = 'skipped',
+  STALE = 'stale',
+  TIMED_OUT = 'timed_out',
+};
+
+export const COMPLETED_URL = /\/completed\/.+/g;
+export const COMPLETED_URL_LENGTH = 11;
