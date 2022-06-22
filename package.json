@@ -22,6 +22,7 @@
   "homepage": "https://github.com/fatnlazycat/WebPushProxy#readme",
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/node": "^18.0.0",
     "ts-node": "^10.5.0"
   },
   "dependencies": {

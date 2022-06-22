@@ -1,6 +1,4 @@
 import http, { IncomingMessage, ServerResponse } from 'http';
-import { APP_ID } from './src/token';
-import { createCheckRun, startCheckRun, completeCheckRun } from './src/controller';
 import webpush from 'web-push';
 
 const PUBLIC_KEY = 'BBbMAl7Exs3fPN4KmNGNLa8F5svFPgSXWpZog3J1o_5xoq-sQqUqpu_WV9KjXrjQdksiSkMCC2L-_lFUp4l_PWw';
@@ -18,6 +16,10 @@ const requestListener = (req: IncomingMessage, res: ServerResponse) => {
     req.on('end', async () => {
       const payload = dataMain && JSON.parse(dataMain);
       console.log('payload', payload);
+
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+      res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
 
       if (req.url === '/' && req.method === 'POST'
       ) {
