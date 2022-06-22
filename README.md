@@ -1,2 +1,2 @@
-# githubToArgoProxy
-githubToArgoProxy
+# WebPushProxy
+echo server for WebPush API
