@@ -34,10 +34,15 @@ const requestListener = (req: IncomingMessage, res: ServerResponse) => {
         //     p256dh: '.....'
         //   }
         // };
-        const pushSubscription = JSON.parse(payload);
-        webpush.sendNotification(pushSubscription, 'Your Push Payload Text').then((result) => {
-          console.log('send result:', result);
-        });
+        // const pushSubscription = JSON.parse(payload);
+        const pushSubscription = payload;
+        webpush.sendNotification(pushSubscription, 'Your Push Payload Text').then(
+          (result) => {
+            console.log('send result:', result);
+          }, (err) => {
+            console.log('could not send push:', err);
+          }
+        );
         res.writeHead(200).end('data received');
         return;
       } else {
